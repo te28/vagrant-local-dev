@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+  DocumentRoot {{ document_root }}
+  <Directory "{{ document_root }}">
+    Options FollowSymLinks -Indexes -ExecCGI
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>

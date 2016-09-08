@@ -1,0 +1,4 @@
+---
+- include: ansible.yml
+- include: yum_repos.yml
+- include: utility.yml

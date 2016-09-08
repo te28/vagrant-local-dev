@@ -1,0 +1,79 @@
+- name: install ruby require modules
+  yum: name={{ item }} state=latest
+  become: yes
+  with_items:
+    - gcc
+    - gcc-c++
+    - make
+    - openssl-devel
+    - zlib-devel
+    - readline-devel
+    - sqlite-devel
+  tags: ruby
+
+- name: rbenv | check rbenv installed
+  command: test -x /home/vagrant/.rbenv
+  register: rbenv_present
+  ignore_errors: yes
+  become: no
+  tags: ruby
+
+- name: rbenv | clone rbenv repo
+  git: >-
+    repo=https://github.com/sstephenson/rbenv.git
+    dest=/home/vagrant/.rbenv
+  when: rbenv_present.rc != 0
+  become: no
+  tags: ruby
+
+- name: rbenv | update bash_profile
+  copy: >-
+    src=bash_profile.custom
+    dest=/home/vagrant/.bash_profile
+    backup=yes
+  become: no
+  tags: ruby
+
+- name: rbenv | Check ruby-build installed
+  command: test -x /home/vagrant/.rbenv/plugins/ruby-build
+  register: rbuild_present
+  ignore_errors: yes
+  become: no
+  tags: ruby
+
+- name: rbenv | clone ruby-build repo
+  git: >-
+    repo=https://github.com/sstephenson/ruby-build.git
+    dest=/home/vagrant/.rbenv/plugins/ruby-build
+  when: rbuild_present.rc != 0
+  become: no
+  tags: ruby
+
+- name: rbenv | update rbenv
+  command: git pull --rebase chdir=/home/vagrant/.rbenv
+  become: no
+  tags: ruby
+
+- name: rbenv | update ruby-build
+  command: git pull --rebase chdir=/home/vagrant/.rbenv/plugins/ruby-build
+  become: no
+  tags: ruby
+
+- name: rbenv | check ruby {{ruby_version}} installed
+  shell: /bin/bash -lc "rbenv versions | grep {{ruby_version}}"
+  register: ruby_installed
+  ignore_errors: yes
+  become: no
+  tags: ruby
+
+- name: rbenv | install ruby {{ ruby_version }}
+  shell: /bin/bash -lc "rbenv install {{ruby_version}} && rbenv rehash && rbenv global {{ruby_version}}"
+  when: ruby_installed.rc != 0
+  become: no
+  tags: ruby
+
+- name: install bundler
+  shell: /bin/bash -l gem install bundler
+  become: no
+  when: ruby_installed.rc != 0
+  tags: ruby

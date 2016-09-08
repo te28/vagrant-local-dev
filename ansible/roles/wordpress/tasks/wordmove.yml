@@ -1,0 +1,18 @@
+---
+- name: Install wordmove
+  become: no
+  gem: name=wordmove state=latest
+  tags: wordmove
+
+- name: make Movefile for wordmove on Temporary Directory
+  template: >
+    src=movefile.j2
+    dest=/home/vagrant/Movefile
+    mode=0755
+  tags: wordmove
+
+- name: move Movefile
+  command: >
+    mv /home/vagrant/Movefile /vagrant/Movefile
+    creates=/vagrant/Movefile
+  tags: wordmove

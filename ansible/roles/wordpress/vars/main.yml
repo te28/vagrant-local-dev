@@ -1,0 +1,34 @@
+---
+
+# ====================
+# common
+# ====================
+
+document_root:
+
+# ====================
+# wordpress
+# ====================
+
+# wordpressサイト名
+wordpress_site_name: 'wodpress test site'
+
+# wordpressディレクトリ
+# コアファイルをサブディレクトリにインストールする場合は'/wp'のような形式で指定
+wordpress_directory: '' # like '/wp'
+
+# wordpressで使用するDB名
+wordpress_db_name: 'wordpress'
+# wordpressで使用するDBユーザー
+wordpress_db_user: 'wordpress'
+# wordpressで使用するDBのパスワード
+wordpress_db_password: 'wordpress'
+# wordpressで使用するDBのprefix
+wordpress_db_prefix: 'wp_'
+
+# wordpressの管理ユーザー名
+wordpress_site_admin_user: 'admin'
+# wordpressの管理ユーザーパスワード
+wordpress_site_admin_password: 'admin'
+# wordpressの管理ユーザーメールアドレス
+wordpress_site_admin_email: 'xxxx@xxx.co.jp'

@@ -1,0 +1,19 @@
+- name: install apache
+  yum: name=httpd state=latest
+  tags: apache
+
+- name: start apache enabled
+  service: name=httpd state=started enabled=yes
+  tags: apache
+
+- name: make htdocs directory
+  file: >
+    dest={{ document_root }}
+    state=directory
+
+- name: copy vhost
+  template: >
+    src=vhost.conf.j2
+    dest=/etc/httpd/conf.d/vhost.conf
+    mode=0644
+  notify: restart apache

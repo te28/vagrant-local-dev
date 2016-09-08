@@ -1,0 +1,11 @@
+- name: install mysql
+  yum: name={{item}} state=latest enablerepo=remi
+  with_items:
+    - mysql-server
+    - MySQL-python
+  tags: mysql
+
+- name: start mysql and enabled
+  service: name=mysqld state=started enabled=yes
+  tags: mysql
+

@@ -1,0 +1,16 @@
+# DBの作成
+- name: create database
+  mysql_db: >-
+    name={{ wordpress_db_name }}
+    state=present
+  register: db_exists
+  tags: wordpress
+
+# DBのユーザー作成、権限付与
+- name: create database user
+  mysql_user: >-
+    name={{ wordpress_db_user }}
+    password={{ wordpress_db_password }}
+    priv={{ wordpress_db_name }}.*:ALL
+    state=present
+  tags: wordpress

@@ -1,0 +1,4 @@
+# ruby vars
+rbenv_root: /usr/local/rbenv
+ruby_deploy_user: vagrant
+ruby_version: 2.3.1

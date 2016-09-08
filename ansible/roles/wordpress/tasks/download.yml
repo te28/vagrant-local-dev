@@ -1,0 +1,15 @@
+# wordpressのディレクトリを作成
+- name: create wp directory
+  file: >-
+    dest={{ document_root }}{{ wordpress_directory }}
+    state=directory
+  tags: wordpress
+
+# wp-cliを使用し、wordpressのコアファイルを取得
+- name: download WordPress
+  become: no
+  command: >
+    wp core download --locale=ja --path={{ document_root }}{{ wordpress_directory }}
+    chdir={{ document_root }}{{ wordpress_directory }}
+    creates={{ document_root }}{{ wordpress_directory }}/index.php
+  tags: wordpress

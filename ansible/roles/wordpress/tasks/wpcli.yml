@@ -1,0 +1,21 @@
+---
+- name: check if wp_cli does not exist
+  file: path=/usr/local/bin/wp state=file
+  register: cli_exists
+  ignore_errors: yes
+  tags: wpcli
+
+- name: install wp-cli
+  shell: curl -kL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > ~/wp-cli.phar
+  when: cli_exists|failed
+  tags: wpcli
+
+- name: change attribute wp-cli
+  file: path=~/wp-cli.phar mode=0755
+  when: cli_exists|failed
+  tags: wpcli
+
+- name: install wp-cli
+  command: mv -f ~/wp-cli.phar /usr/local/bin/wp
+  when: cli_exists|failed
+  tags: wpcli
