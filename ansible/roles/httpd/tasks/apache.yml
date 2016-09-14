@@ -6,11 +6,6 @@
   service: name=httpd state=started enabled=yes
   tags: apache
 
-- name: make htdocs directory
-  file: >
-    dest={{ document_root }}
-    state=directory
-
 - name: copy vhost
   template: >
     src=vhost.conf.j2
