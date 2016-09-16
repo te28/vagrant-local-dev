@@ -19,7 +19,7 @@
 以下をリンク先からインストールして下さい。
 
 * [Virtual Box](https://www.virtualbox.org/)
-* [Vagrant](https://www.virtualbox.org/)
+* [Vagrant](https://www.vagrantup.com/)
 
 ### vagrant プラグイン
 
