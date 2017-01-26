@@ -1,5 +1,5 @@
 # require modules install
-- name: node | install ruby require modules
+- name: node | install node require modules
   yum: name={{ item }} state=latest
   become: yes
   with_items:
