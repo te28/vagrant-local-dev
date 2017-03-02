@@ -1,0 +1,56 @@
+# Perl CPAN libraries
+- name: cpanm - set locale
+  command: localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+  tags: perl
+
+- name: cpanm installed Check
+  command: which cpanm
+  register: which_cpanm
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}" # sudo で実行すると /usr/local/bin にパスが通っていないので一時的に設定
+  failed_when: which_cpanm.rc not in [0, 1] # cpanm が見つからなくても終了コードを 0 にする
+  changed_when: false # 変更があってもなかったことにする
+  check_mode : no # 常に実行する
+  tags: perl
+
+- name: cpanm install
+  shell: curl -L http://cpanmin.us | perl - --sudo App::cpanminus
+  when: which_cpanm.rc == 1
+  tags: perl
+
+- name: cpanm perl module install
+  cpanm:
+    name: "{{item}}"
+    notest: True
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}" # sudo で実行すると /usr/local/bin にパスが通っていないので一時的に設定
+  with_items:
+    - Plack
+    - CGI::PSGI
+    - IPC::Run
+    - Cache::File
+    - Archive::Zip
+    - XML::SAX
+    - Authen::SASL
+    - Mozilla::CA
+    - Image::Size
+    - CGI::Parse::PSGI
+    - Imager
+    - Crypt::DSA
+    - Cache::Memcached
+    - Digest::SHA1
+    - XML::SAX::Expat
+    - YAML::Syck
+    - Net::SSLeay
+    - XMLRPC::Transport::HTTP::Plack
+    - SOAP::Lite
+    - Crypt::SSLeay
+    - Net::SMTP::SSL
+    - Net::SMTP::TLS
+    - IO::Socket::SSL
+    - GD
+    - XML::Atom
+    - XML::LibXML::SAX
+    - XML::SAX::ExpatXS
+    - Web::Scraper # Movable Type の CLI での再構築のために必要
+  tags: perl

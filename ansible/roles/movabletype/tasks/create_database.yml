@@ -1,0 +1,16 @@
+# DBの作成
+- name: create database
+  mysql_db: >-
+    name={{ mt_db_name }}
+    state=present
+  register: db_exists
+  tags: movabletype
+
+# DBのユーザー作成、権限付与
+- name: create database user
+  mysql_user: >-
+    name={{ mt_db_user }}
+    password={{ mt_db_password }}
+    priv={{ mt_db_name }}.*:ALL
+    state=present
+  tags: movabletype

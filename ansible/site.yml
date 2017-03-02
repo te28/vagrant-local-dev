@@ -9,6 +9,19 @@
     # document root
     document_root: /var/www/html
 
+    #### for Movable Type ####
+    # Mtで使用するDB名
+    mt_db_name:
+    # Mtで使用するDBユーザー
+    mt_db_user:
+    # Mtで使用するDBのパスワード
+    mt_db_password:
+
+    # MTのコアファイルのURL
+    mt_archive_url:
+    mt_archive_filename: # like 'MTOS-5.2.13'
+
+    #### for Wordpress ####
     # wordpressサイト名
     wordpress_site_name:
 
@@ -34,6 +47,8 @@
     - httpd
     - mysql
     - php
-    #- ruby
-    - node
+    # - ruby
+    # - node
     # - wordpress
+    # - perl
+    # - movabletype

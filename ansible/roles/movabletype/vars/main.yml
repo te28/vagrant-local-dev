@@ -1,0 +1,16 @@
+---
+# ====================
+# Movable Type
+# ====================
+
+# Mtで使用するDB名
+mt_db_name: 'mt'
+# Mtで使用するDBユーザー
+mt_db_user: 'mt'
+# Mtで使用するDBのパスワード
+mt_db_password: 'mt'
+
+# MTのファイルURL
+mt_archive_url: 'https://www.movabletype.jp/downloads/stable/MTOS-5.2.13.zip'
+mt_archive_filename: 'MTOS-5.2.13'
+

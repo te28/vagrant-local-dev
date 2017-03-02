@@ -1,0 +1,36 @@
+# Perl Required Library
+- name: Install Perl Required Library
+  yum:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - openssl-devel
+    - zlib-devel
+    - readline-devel
+    - gd-devel
+    - libxml2-devel
+    - expat-devel
+  tags: perl
+
+# Perl dbd mysql Install
+- name: Install perl-DBD-MySQL
+  yum: name=perl-DBD-MySQL state=installed
+  tags: perl
+
+# Perl libraries
+- name: Install Perl libraries by Yum
+  yum:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - perl
+    - perl-CPAN
+    - perl-core
+    - perl-devel
+    - perl-CGI
+    - perl-Archive-Tar
+    - perl-libwww-perl
+    - perl-YAML
+    - perl-ExtUtils-MakeMaker
+    - ImageMagick-perl
+  tags: perl

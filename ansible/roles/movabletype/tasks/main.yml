@@ -1,0 +1,4 @@
+---
+- include: httpd_conf.yml
+- include: create_database.yml
+- include: download_mt.yml

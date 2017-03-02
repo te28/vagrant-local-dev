@@ -1,0 +1,41 @@
+# MTのダウンロード
+- name: check MT Downloaded
+  stat: path={{ document_root }}/{{ mt_archive_filename }}.zip
+  become: no
+  register: mt_archive_exists
+
+- name: wget MT download
+  command: >
+    wget -O {{ document_root }}/{{ mt_archive_filename }}.zip {{ mt_archive_url }} --no-check-certificate --no-cookie
+  become: no
+  when: mt_archive_exists.stat.md5 is not defined
+
+# - name: download Movable Type
+#   get_url:
+#     url: '{{ mt_archive_url }}'
+#     dest: '{{ ansible_env.HOME }}'
+#   tags: movabletype
+
+# ダウンロードしたMTアーカイブファイルの解凍
+- name: Unarchive Movable Type File
+  unarchive:
+    src: '{{ document_root }}/{{ mt_archive_filename }}.zip'
+    dest: '{{ document_root }}'
+    copy: yes
+  become: no
+  tags: movabletype
+
+# 解凍したMTファイルを移動
+- name: rename MT File
+  command: mv {{ document_root }}/{{ mt_archive_filename }}/ {{ document_root }}/mt/
+  become: no
+  tags: movabletype
+
+# ダウンロードしたMTアーカイブファイルの削除
+- name: Unarchive Movable Type File
+  file:
+    path: '{{ document_root }}/{{ mt_archive_filename }}.zip'
+    state: absent
+  become: no
+  tags: movabletype
+
