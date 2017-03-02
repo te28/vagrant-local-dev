@@ -7,12 +7,19 @@
 
 ### 構築環境
 
+#### サーバ環境
+
 * CentOS 6.7
 * PHP 5.6
 * MySQL 5.6
 * Apache 2.2
 * Ruby 2.3.1
 * Nodejs 4.4
+
+#### その他
+
+* ドキュメントルート(/var/www/html/)とローカルの「html」ディレクトリが
+同期されます。
 
 ## 動作環境
 
@@ -56,6 +63,44 @@ config.vm.network "private_network", ip: "192.168.33.XX"
 config.vm.hostname = "xxx.local"
 ```
 
+#### LAMP環境のみの場合
+
+「vagrantの起動」に進んで下さい
+
+#### wordpress環境を用意する場合
+
+`site.yml`を開き、下記の`wordpress`タスクのコメントアウトを外して下さい。
+
+```
+  roles:
+    - common
+    - httpd
+    - mysql
+    - php
+    # - ruby
+    # - node
+    - wordpress # コメントアウト外す
+    # - perl
+    # - movabletype
+```
+
+#### MovableType環境を用意する場合
+
+`site.yml`を開き、下記の`perl`,`movabletype`タスクのコメントアウトを外して下さい。
+
+```
+  roles:
+    - common
+    - httpd
+    - mysql
+    - php
+    # - ruby
+    # - node
+    # - wordpress
+    - perl # コメントアウト外す
+    - movabletype # コメントアウト外す
+```
+
 ### vagrantの起動
 
 以下コマンドを実行してください。
@@ -84,7 +129,6 @@ $ vagrant provision
 ├── Vagrantfile // vagrantのプログラム
 ├── ansible // ansibleのタスク群
 │   ├── ansible.cfg // ansible全般の設定を記述
-│   ├── host_vars
 │   ├── hosts // インベントリファイル どのサーバーを管理するのか記述
 │   ├── roles
 │   │   ├── common // 環境構築に必要なパッケージを設定
@@ -103,11 +147,19 @@ $ vagrant provision
 │   │   │   │   └── main.yml
 │   │   │   └── templates
 │   │   │        └── vhost.conf.j2
-│   │   ├── mysql // mysqlの設定
-│   │   │   ├── defaults
-│   │   │   ├── files
+│   │   ├── movabletype // movabletypeの設定
 │   │   │   ├── handlers
-│   │   │   ├── meta
+│   │   │   │   └── main.yml
+│   │   │   ├── tasks
+│   │   │   │   ├── create_database.yml
+│   │   │   │   ├── download_mt.yml
+│   │   │   │   ├── httpd_conf.yml
+│   │   │   │   └── main.yml
+│   │   │   ├── templates
+│   │   │   │   └── movabletype.conf.j2
+│   │   │   └── vars
+│   │   │       └── main.yml
+│   │   ├── mysql // mysqlの設定
 │   │   │   └── tasks
 │   │   │   │   ├── main.yml
 │   │   │   │   └── mysql.yml
@@ -115,6 +167,11 @@ $ vagrant provision
 │   │   │   └── tasks
 │   │   │   　   ├── main.yml
 │   │   │   　   └── node.yml
+│   │   ├── perl // perlの設定(Movable Typeタスクの前に実行)
+│   │   │   └── tasks
+│   │   │   　   ├── cpanm.yml
+│   │   │   　   ├── main.yml
+│   │   │   　   └── yum.yml
 │   │   ├── php // phpの設定
 │   │   │   ├── handlers
 │   │   │   │   └── main.yml
@@ -154,7 +211,7 @@ $ vagrant provision
 │   │       │   └── wp-config.php
 │   │       └── vars
 │   │           └── main.yml
-│   └── site.yml
+│   └── site.yml # ansibleの全体タスク設定
 └── html // 仮想環境のドキュメントルート以下が同期されます。
 ```
 
@@ -165,4 +222,3 @@ $ vagrant provision
 
 ### Vagrant + Ansible で開発環境を作るなら ansible_local プロビジョナがいい！
 <http://blog.shin1x1.com/entry/ansible_local-provisioner-in-vagrant>
-
