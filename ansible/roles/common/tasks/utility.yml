@@ -1,9 +1,10 @@
  - name: install utility module
-   yum: name={{ item }} state=latest
-   with_items:
-     - vim
-     - git
-     - wget
-     - curl
-     - unzip
-     - gcc
+   yum:
+    name:
+      - yum-utils
+      - vim
+      - git
+      - wget
+      - curl
+      - unzip
+      - gcc

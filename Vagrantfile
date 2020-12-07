@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "bento/centos-6.9"
+  config.vm.box = "bento/centos-7"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
   # config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.network "private_network", ip: "192.168.33.10"
 
-  config.vm.hostname = "dev.local"
+  config.vm.hostname = "test-server.test"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on

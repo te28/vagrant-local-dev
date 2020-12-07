@@ -1,11 +1,88 @@
-- name: install mysql
-  yum: name={{item}} state=latest enablerepo=remi
-  with_items:
-    - mysql-server
-    - MySQL-python
+- name: install mysql repository
+  yum:
+    name: https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+    validate_certs: yes
+    state: present
+  tags: mysql
+
+- name: install mysql package
+  yum:
+    name: "{{packages}}"
+    state: latest
+  vars:
+    packages:
+      - MySQL-python
+      - mysql-community-server
+      - mysql-community-client
   tags: mysql
 
 - name: start mysql and enabled
-  service: name=mysqld state=started enabled=yes
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  tags: mysql
+
+- name: check .my.cnf exists
+  stat:
+    path: /root/.my.cnf
+  register: mycnf_file
+  tags: mysql
+
+- name: get mysql temporary password
+  shell: cat /var/log/mysqld.log | grep "temporary password" | awk '{print $11}'
+  register: mysql_default_password
+  when: not mycnf_file.stat.exists
+  tags: mysql
+
+- name: deploy init .my.cnf
+  template:
+    src: templates/init_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  when: not mycnf_file.stat.exists
+  tags: mysql
+
+- name: change password validation to the easy way
+  shell: |
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=4;"
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
+  when: not mycnf_file.stat.exists
+  tags: mysql
+
+- name: change root user password
+  shell: |
+    mysql -u root -p'{{ mysql_default_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';"
+  when: not mycnf_file.stat.exists
+  tags: mysql
+
+- name: deploy changed .my.cnf
+  template:
+    src: templates/my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  tags: mysql
+
+- name: deploy changed .my.cnf
+  template:
+    src: templates/my.cnf.j2
+    dest: /etc/my.cnf
+  tags: mysql
+
+- name: remove all anonymous user
+  mysql_user:
+    name: ''
+    state: absent
+    host: localhost
+  tags: mysql
+
+- name: restart mysqld
+  service:
+    name: mysqld
+    state: restarted
   tags: mysql
 

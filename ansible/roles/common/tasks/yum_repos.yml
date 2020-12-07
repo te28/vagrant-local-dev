@@ -1,10 +1,14 @@
 # EPEL/Remi/RPMforgeをインストールする
-- name: additional yum repository install
-  yum: name={{item}} state=present
-  with_items:
-    - http://ftp.riken.jp/Linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
-    # - http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-    - http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: installed
+
+- name: install remi
+  yum:
+    name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+    state: installed
 
 # 明示的に指定したいのでenabledは全て0にする
 - name: repository enabled
